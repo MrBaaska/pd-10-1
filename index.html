@@ -614,6 +614,10 @@
       display: block;
       background: transparent;
     }
+    #content-frame:fullscreen {
+      width: 100vw;
+      height: 100dvh;
+    }
     .main.fullscreen-main #content-frame {
       min-height: calc(100dvh - var(--topbar-height));
     }
@@ -1003,6 +1007,10 @@
         <a href="#" class="sidebar-link" id="habea-link" data-page-key="ХАБЭА-н үзлэг"><i class="fa fa-layer-group"></i>ХАБЭА-н үзлэг</a>
       </div>
 
+      <div class="sidebar-item">
+        <a href="#" class="sidebar-link" id="surgalt-link" data-page-key="Сургалт"><i class="fa fa-graduation-cap"></i>Сургалт</a>
+      </div>
+
       <div class="sidebar-divider"></div>
       <div class="sidebar-item has-sub" onclick="toggleSub(this)">
         <div class="sidebar-link"><i class="fa fa-calculator"></i> Паспортын үзлэг</div>
@@ -1059,7 +1067,8 @@
   const EDIT_UNLOCK_CODE = '87!3$1509';
   const FULLSCREEN_PAGE_KEYS = new Set([
     'Ажлын бүртгэл',
-    'Хурлын тэмдэглэл'
+    'Хурлын тэмдэглэл',
+    'Зааварчилгаа / Тор засагч'
   ]);
 
   function readLastPage() {
@@ -1215,6 +1224,7 @@
     'Ирц бүртгэл': 'irts.html',
     'Өдөр тутмын зааварчилгаа': 'zoovorchilgoo.html',
     'Зааварчилгаа / Зам засвар': 'zoovorchilgoo.html',
+    'Зааварчилгаа / Тор засагч': 'https://www.youtube.com/embed/tjzEKLEMjsM?rel=0',
     'Цахилгаан': 'tsahilgaan.html',
     'Төлөвлөгөө / Сарын ажлын төлөвлөгөө': 'sariin.html',
     'Шийдвэр': 'shiidwer.html',
@@ -1231,6 +1241,7 @@
     'Нөөц зам төмрийн судалгаа': 'nootsZT.html',
     'Уулзварын зайн судалгаа': 'uZai.html',
     'ХАБЭА-н үзлэг': 'habea.html',
+    'Сургалт': 'surgalt.html',
     'Паспортын үзлэг': 'passport.html',
     'Замын техникийн байдал': 'tech.html',
     'Хэсгийн танилцуулга': 'heseg.html',
@@ -1777,7 +1788,13 @@
       link.addEventListener('click', function(e) {
         e.preventDefault();
         e.stopPropagation();
-        loadFramePage(this.dataset.pageKey, this);
+        const pageKey = this.dataset.pageKey;
+        loadFramePage(pageKey, this);
+        if (pageKey === 'Зааварчилгаа / Тор засагч' && frame && frame.requestFullscreen) {
+          frame.requestFullscreen().catch(function(error) {
+            console.warn('Video fullscreen request failed:', error);
+          });
+        }
       });
     });
 
